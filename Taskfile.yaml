@@ -13,20 +13,20 @@ tasks:
         cmds:
             - docker compose down
 
-    unit-test:
-        desc: "Run unit tests"
+    gen-docs:
+        desc: "Generate Swagger docs"
         cmds:
-            - docker build -t shortify --progress plain --no-cache --target run-test .
+            - docker run --rm -v $(pwd):/code ghcr.io/swaggo/swag:v1.16.4 init -g ./cmd/api-server/main.go
 
     gen-mocks:
         desc: "Generate mocks"
         cmds:
             - docker run --rm -v $(pwd):/src -w /src vektra/mockery:v2.53.2 --all
 
-    gen-docs:
-        desc: "Generate Swagger docs"
+    unit-test:
+        desc: "Run unit tests"
         cmds:
-            - docker run --rm -v $(pwd):/code ghcr.io/swaggo/swag:v1.16.4 init -g ./cmd/api-server/main.go
+            - docker build -t shortify --progress plain --no-cache --target run-test .
 
     migrate-up:
         desc: "Migrate up"
