@@ -1,0 +1,39 @@
+version: '3'
+
+dotenv: [".env"]
+
+tasks:
+    start:
+        desc: "Start the application"
+        cmds:
+            - docker compose up --build
+
+    stop:
+        desc: "Stop the application"
+        cmds:
+            - docker compose down
+
+    unit-test:
+        desc: "Run unit tests"
+        cmds:
+            - docker build -t shortify --progress plain --no-cache --target run-test .
+
+    gen-mocks:
+        desc: "Generate mocks"
+        cmds:
+            - docker run --rm -v $(pwd):/src -w /src vektra/mockery:v2.53.2 --all
+
+    gen-docs:
+        desc: "Generate Swagger docs"
+        cmds:
+            - docker run --rm -v $(pwd):/code ghcr.io/swaggo/swag:v1.16.4 init -g ./cmd/api-server/main.go
+
+    migrate-up:
+        desc: "Migrate up"
+        cmds:
+            - docker run --rm -v $(pwd)/migrations:/migrations --network shortify_shortify migrate/migrate -path=/migrations -database postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST/$POSTGRES_DB?sslmode=disable up
+
+    migrate-down:
+        desc: "Migrate down"
+        cmds:
+            - docker run --rm -v $(pwd)/migrations:/migrations --network shortify_shortify migrate/migrate -path=/migrations -database postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST/$POSTGRES_DB?sslmode=disable down -all

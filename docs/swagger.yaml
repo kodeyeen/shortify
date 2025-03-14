@@ -1,0 +1,110 @@
+definitions:
+  shortify.CreateURLRequest:
+    properties:
+      original:
+        type: string
+    required:
+    - original
+    type: object
+  shortify.CreateURLResponse:
+    properties:
+      alias:
+        type: string
+      original:
+        type: string
+    type: object
+  shortify.ErrorResponse:
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  shortify.GetURLByAliasResponse:
+    properties:
+      alias:
+        type: string
+      original:
+        type: string
+    type: object
+info:
+  contact:
+    email: scanderoff@gmail.com
+    name: Ruslan Iskandarov
+    url: https://www.t.me/ixderious
+  description: This is the Ozon internship assignment.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Shortify API
+  version: "1.0"
+paths:
+  /api/v1/urls:
+    post:
+      consumes:
+      - application/json
+      description: Create creates new URL and generates an alias for it
+      parameters:
+      - description: Create URL
+        in: body
+        name: URL
+        required: true
+        schema:
+          $ref: '#/definitions/shortify.CreateURLRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/shortify.CreateURLResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/shortify.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/shortify.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/shortify.ErrorResponse'
+      summary: Create a URL
+      tags:
+      - urls
+  /api/v1/urls/{alias}:
+    get:
+      consumes:
+      - application/json
+      description: Get URL by its alias
+      parameters:
+      - description: Get URL by alias
+        in: path
+        name: alias
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/shortify.GetURLByAliasResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/shortify.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/shortify.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/shortify.ErrorResponse'
+      summary: Get URL by its alias
+      tags:
+      - urls
+swagger: "2.0"

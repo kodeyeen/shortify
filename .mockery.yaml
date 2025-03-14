@@ -1,0 +1,29 @@
+with-expecter: true
+resolve-type-alias: False
+issue-845-fix: True
+disable-version-string: True
+packages:
+    github.com/kodeyeen/shortify/internal/delivery/http/v1:
+        interfaces:
+            URLService:
+                config:
+                    dir: "internal/urlmock"
+                    filename: "urlmock.go"
+                    outpkg: "urlmock"
+                    mockname: "Service"
+    github.com/kodeyeen/shortify/internal/url:
+        # place your package-specific config here
+        config:
+        interfaces:
+            Repository:
+                config:
+                    dir: "internal/persistence/mock"
+                    filename: "url.go"
+                    outpkg: "mock"
+                    mockname: "URLRepository"
+            AliasProvider:
+                config:
+                    dir: "internal/generation/mock"
+                    filename: "alias.go"
+                    outpkg: "mock"
+                    mockname: "AliasProvider"

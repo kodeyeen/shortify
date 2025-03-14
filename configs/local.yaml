@@ -1,0 +1,10 @@
+env: "local"
+persistence_type: postgres
+alias:
+  length: 10
+  charset: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_
+http_server:
+  read_timeout: "3s"
+  write_timeout: "3s"
+  idle_timeout: "30s"
+  shutdown_timeout: "10s"

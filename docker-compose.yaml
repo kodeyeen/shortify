@@ -1,0 +1,57 @@
+services:
+    api_server:
+        image: shortify:v1.0
+        depends_on:
+            - migrate
+        # restart: always
+        networks:
+            - shortify
+        build:
+            context: .
+        ports:
+            - ${HTTP_SERVER_PORT}:${HTTP_SERVER_PORT}
+        env_file: ".env"
+        environment:
+            POSTGRES_HOST: ${POSTGRES_HOST:-postgres}
+            POSTGRES_DB: ${POSTGRES_DB:-shortify}
+            POSTGRES_USER: ${POSTGRES_USER:-postgres}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+
+    postgres:
+        image: postgres:15-alpine
+        restart: unless-stopped
+        networks:
+            - shortify
+        ports:
+            - 5432:5432
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+        env_file: ".env"
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB:-shortify}
+            POSTGRES_USER: ${POSTGRES_USER:-postgres}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+
+    migrate:
+        image: migrate/migrate
+        depends_on:
+            postgres:
+                condition: service_healthy
+        networks:
+            - shortify
+        volumes:
+            - ./migrations:/migrations
+        command: ["-path", "/migrations", "-database", "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable", "up"]
+
+
+networks:
+    shortify:
+
+volumes:
+    pgdata:
+    migrations:
