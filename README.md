@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/a89a772c-769c-40f0-b098-080a8f538ada)
+
 # Shortify
 
 Shortify это сервис сокращатель ссылок, сделанный в рамках отбора на стажировку в компанию Ozon.
@@ -21,9 +23,6 @@ task start
 
 Команда запустит базу данных PostgreSQL, применит все миграции и запустит HTTP сервер.  
 По адресу http://localhost:8080/swagger/index.html можно будет открыть Swagger документацию.
-
-![Снимок экрана 2025-03-14 155635](https://github.com/user-attachments/assets/a89a772c-769c-40f0-b098-080a8f538ada)
-
 
 ### Запуск юнит-тестов
 
