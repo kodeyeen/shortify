@@ -1,4 +1,3 @@
-![image](https://github.com/user-attachments/assets/f8283937-70cd-451f-8468-120c8ac5e9a8)
 # Shortify
 
 Shortify это сервис сокращатель ссылок, сделанный в рамках отбора на стажировку в компанию Ozon.
