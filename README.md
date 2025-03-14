@@ -36,7 +36,7 @@ task unit-test
 ```
 .
 ├── cmd
-│   └── api-server            # бинарь, запускающий API сервер
+│   └── api-server            # команда, запускающая API сервер
 ├── configs
 ├── docs                      # Swagger документация
 ├── internal
