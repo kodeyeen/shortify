@@ -1,5 +1,4 @@
 env: "local"
-persistence_type: postgres
 alias:
   length: 10
   charset: abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_
