@@ -9,18 +9,16 @@ import (
 )
 
 type URLRepository struct {
-	items map[int64]*domain.URL
-
-	aliasIdx map[string]*domain.URL
+	originalIdx map[string]*domain.URL
+	aliasIdx    map[string]*domain.URL
 
 	mu *sync.RWMutex
 }
 
 func NewURLRepository() *URLRepository {
 	return &URLRepository{
-		items: map[int64]*domain.URL{},
-
-		aliasIdx: map[string]*domain.URL{},
+		originalIdx: map[string]*domain.URL{},
+		aliasIdx:    map[string]*domain.URL{},
 
 		mu: &sync.RWMutex{},
 	}
@@ -30,13 +28,17 @@ func (r *URLRepository) Add(ctx context.Context, u *domain.URL) (int64, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
-	if _, ok := r.items[u.ID]; ok {
+	if _, ok := r.originalIdx[u.Original]; ok {
 		return 0, persistence.ErrURLAlreadyExists
 	}
 
-	id := int64(len(r.items) + 1)
+	if _, ok := r.aliasIdx[u.Alias]; ok {
+		return 0, persistence.ErrDuplicateAlias
+	}
 
-	r.items[id] = u
+	id := int64(len(r.originalIdx) + 1)
+
+	r.originalIdx[u.Original] = u
 	r.aliasIdx[u.Alias] = u
 
 	return id, nil
