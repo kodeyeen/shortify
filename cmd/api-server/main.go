@@ -72,7 +72,12 @@ func main() {
 		}
 
 		urlRepo = postgres.NewURLRepository(dbpool)
+	default:
+		log.Error("invalid persistence type config", slog.String("persistence_type", cfg.PersistenceType))
+		os.Exit(1)
 	}
+
+	log.Info("initialized url repository", slog.String("persistence_type", cfg.PersistenceType))
 
 	aliasPrvr := rand.NewAliasProvider(cfg.Alias.Charset, cfg.Alias.Length)
 	urlSvc := url.NewService(urlRepo, aliasPrvr, log)
